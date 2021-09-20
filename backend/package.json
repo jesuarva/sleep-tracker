@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Cynomi Full Stack Technical Task: Create a web application using React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=development nodemon ./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.1",
+    "cors": "^2.8.4",
+    "dotenv": "^10.0.0",
+    "express": "^4.16.3",
+    "express-router-factory": "^1.1.0",
+    "helmet": "^3.13.0",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.14"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "nodemon": "^2.0.12"
+  }
+}
