@@ -10,6 +10,7 @@ import { useAppState } from "../../store";
 import classes from "./ViewSleepRecords.module.scss";
 import { MouseEvent, useState } from "react";
 import { UserRecords } from "../../types";
+import { EChart } from "./Echart";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -72,6 +73,34 @@ export default function ViewSleepRecords() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Paper
+        id="Add user form"
+        className={classes.root}
+        component="div"
+        elevation={3}
+      >
+        {pickedUser && (
+          <EChart
+            style={{ flex: "1 0 auto" }}
+            option={{
+              xAxis: {
+                type: "category",
+                data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              },
+              yAxis: {
+                type: "value",
+              },
+              series: [
+                {
+                  data: [120, 200, 150, 80, 70, 110, 130],
+                  type: "bar",
+                },
+              ],
+            }}
+          />
+        )}
+      </Paper>
     </Paper>
   );
 }
