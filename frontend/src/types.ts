@@ -1,7 +1,9 @@
-type ISODate = String;
+type UniqueIdentifier = string;
+type ISODate = string;
 type Float = Number;
 
 interface User {
+  _id: UniqueIdentifier;
   name: string;
   gender: "male" | "female";
 }

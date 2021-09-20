@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import {
   FC,
   useReducer,
@@ -6,9 +7,13 @@ import {
   useRef,
   Dispatch,
 } from "react";
+import { api } from "../services";
+import { UserRecords } from "../types";
 
 /* Types */
-interface AppState {}
+interface AppState {
+  sleepRecords: UserRecords[];
+}
 
 interface ContextShape {
   dispatch: Dispatchers;
@@ -26,7 +31,9 @@ interface Action<T> {
   type: T;
 }
 
-interface ActionGetSleepRecords extends Action<ActionTypes.getSleepRecords> {}
+interface ActionGetSleepRecords extends Action<ActionTypes.getSleepRecords> {
+  sleepRecords: UserRecords[];
+}
 
 interface ActionPostUser extends Action<ActionTypes.postUser> {}
 
@@ -43,14 +50,21 @@ type Dispatchers = {
 
 function getDispatchers(dispatch: Dispatch<AppActions>): Dispatchers {
   return {
-    getSleepRecords() {
-      return dispatch({ type: ActionTypes.getSleepRecords });
+    async getSleepRecords() {
+      console.log("\x1b[45mJSAV\x1b[0m getSleepRecords  ");
+      try {
+        const response: AxiosResponse<UserRecords[]> = await api.get("/");
+        const sleepRecords = response.data;
+        dispatch({ type: ActionTypes.getSleepRecords, sleepRecords });
+      } catch (error) {
+        console.log("\x1b[45mJSAV\x1b[0m error  ", error);
+      }
     },
     postUser() {
-      return dispatch({ type: ActionTypes.postUser });
+      dispatch({ type: ActionTypes.postUser });
     },
     putSleepRecord() {
-      return { type: ActionTypes.putNewSleepRecord };
+      return dispatch({ type: ActionTypes.putNewSleepRecord });
     },
   };
 }
@@ -58,13 +72,21 @@ function getDispatchers(dispatch: Dispatch<AppActions>): Dispatchers {
 /** Reducer */
 function reducer(state: AppState, action: AppActions): AppState {
   switch (action.type) {
+    case ActionTypes.getSleepRecords: {
+      return {
+        ...state,
+        sleepRecords: action.sleepRecords,
+      };
+    }
     default:
       return state;
   }
 }
 
 /* Context */
-const initialState: AppState = {};
+const initialState: AppState = {
+  sleepRecords: [],
+};
 
 const AppStateContext = createContext<ContextShape>({
   state: initialState,
