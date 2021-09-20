@@ -1,19 +1,19 @@
-import { forwardRef } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import AddSleepTime from "../AddSleepTime";
 
 import classes from "./App.module.scss";
 
 const PATHS = {
   home: "/",
-  addSleepTime: "add-sleep-time",
+  addSleepTime: "/add-sleep-time",
 };
 
-function App() {
+export default function App() {
   return (
     <Box className={classes.App}>
       <AppBar position="static">
@@ -46,15 +46,11 @@ function App() {
       <Box className={classes.main} component="main">
         <Switch>
           <Route exact path={PATHS.home}>
-            Add sleep time
-          </Route>
-          <Route exact path="/">
             VIEW MY SLEEP RECORDS
           </Route>
+          <Route path={PATHS.addSleepTime} component={AddSleepTime}></Route>
         </Switch>
       </Box>
     </Box>
   );
 }
-
-export default App;

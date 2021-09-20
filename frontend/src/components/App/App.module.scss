@@ -28,5 +28,7 @@
     width: 90vw;
     flex: 1 0 auto;
     background-color: white;
+    display: flex;
+    flex-direction: column;
   }
 }
