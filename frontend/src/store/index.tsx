@@ -14,6 +14,7 @@ import { UserRecords } from "../types";
 interface AppState {
   sleepRecords: UserRecords[];
   isCreatingUser: boolean;
+  isPuttingRecord: boolean;
 }
 
 interface ContextShape {
@@ -27,6 +28,7 @@ enum ActionTypes {
   postUser = "postUser",
   isCreatingUser = "isCreatingUser",
   putNewSleepRecord = "putNewSleepRecord",
+  isPuttingRecord = "isPuttingRecord",
 }
 
 interface Action<T> {
@@ -45,17 +47,24 @@ interface ActionIsCreatingUser extends Action<ActionTypes.isCreatingUser> {
 
 interface ActionPutSleepRecord extends Action<ActionTypes.putNewSleepRecord> {}
 
+interface ActionIsPuttingRecord extends Action<ActionTypes.isPuttingRecord> {
+  isPuttingRecord: boolean;
+}
+
 type AppActions =
   | ActionGetSleepRecords
   | ActionPostUser
   | ActionIsCreatingUser
-  | ActionPutSleepRecord;
+  | ActionPutSleepRecord
+  | ActionIsPuttingRecord;
 
 /** Dispatchers */
 type Dispatchers = {
-  getSleepRecords: () => void;
-  postUser: (data: Pick<UserRecords, "name" | "gender">) => void;
-  putSleepRecord: () => void;
+  getSleepRecords: () => Promise<void>;
+  postUser: (data: Pick<UserRecords, "name" | "gender">) => Promise<void>;
+  putSleepRecord: (
+    data: Pick<UserRecords, "_id" | "sleepRecords">
+  ) => Promise<void>;
 };
 
 function getDispatchers(dispatch: Dispatch<AppActions>): Dispatchers {
@@ -79,7 +88,15 @@ function getDispatchers(dispatch: Dispatch<AppActions>): Dispatchers {
         dispatch({ type: ActionTypes.isCreatingUser, isCreatingUser: false });
       }
     },
-    putSleepRecord() {
+    async putSleepRecord(data) {
+      try {
+        dispatch({ type: ActionTypes.isPuttingRecord, isPuttingRecord: true });
+        await api.put("/sleep-time", data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        dispatch({ type: ActionTypes.isPuttingRecord, isPuttingRecord: false });
+      }
       return dispatch({ type: ActionTypes.putNewSleepRecord });
     },
   };
@@ -109,6 +126,7 @@ function reducer(state: AppState, action: AppActions): AppState {
 const initialState: AppState = {
   sleepRecords: [],
   isCreatingUser: false,
+  isPuttingRecord: false,
 };
 
 const AppStateContext = createContext<ContextShape>({

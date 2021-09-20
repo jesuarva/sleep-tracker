@@ -25,9 +25,12 @@ type Genders = "female" | "male";
 export default function AddSleepTime() {
   const { state, dispatch } = useAppState();
 
-  const [userId, setUserId] = useState<UserRecords["_id"]>();
+  // Used by `Add user form`
   const [name, setName] = useState<string>("");
   const [gender, setGender] = useState<Genders>("female");
+
+  // Used by `Add Sleep time form`
+  const [userId, setUserId] = useState<UserRecords["_id"]>("");
   const [date, setDate] = useState<string>("");
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
@@ -35,6 +38,7 @@ export default function AddSleepTime() {
   return (
     <>
       <Paper
+        id="Add user form"
         className={classes.form}
         component="form"
         data-testid={testIds.root}
@@ -90,13 +94,18 @@ export default function AddSleepTime() {
       </Paper>
 
       <Paper
+        id="Add sleep time form"
         className={classes.form}
         component="form"
         data-testid={testIds.root}
         elevation={3}
-        onSubmit={(e: SyntheticEvent) => {
+        onSubmit={async (e: SyntheticEvent) => {
           e.preventDefault();
-          console.log("SUBMIT");
+          await dispatch.putSleepRecord({
+            _id: userId,
+            sleepRecords: [{ date, time: hours + minutes / 60 }],
+          });
+          void dispatch.getSleepRecords();
         }}
       >
         <Typography variant="h2" gutterBottom component="div">

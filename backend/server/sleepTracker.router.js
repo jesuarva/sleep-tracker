@@ -30,7 +30,7 @@ router.put("/sleep-time", async (req, res) => {
   const data = req.body;
   const userRecords = await UserRecords.findById(data._id);
 
-  userRecords.sleepRecords.push(data.record);
+  userRecords.sleepRecords.push(...data.sleepRecords);
 
   userRecords.save(function (err) {
     if (err)

@@ -8,13 +8,13 @@ interface User {
   gender: "male" | "female";
 }
 
-interface SleepRecords {
+interface SleepRecord {
   time: Float;
   date: ISODate;
 }
 
 export interface UserRecords extends User {
-  sleepRecords: SleepRecords[];
+  sleepRecords: SleepRecord[];
 }
 // validate: {
 //   validator: (val) =>

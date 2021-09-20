@@ -20,7 +20,7 @@ export default function App() {
 
   useEffect(() => {
     void dispatch.getSleepRecords();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Box className={classes.App}>
