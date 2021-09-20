@@ -8,11 +8,10 @@ import Paper from "@mui/material/Paper";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
-import classes from "./AddSleepTime.module.scss";
 import { Button } from "@mui/material";
 import { useAppState } from "../../store";
 import { UserRecords } from "../../types";
+import classes from "./AddSleepTime.module.scss";
 
 export const testIds = {
   root: "add-sleep-record",
@@ -127,7 +126,9 @@ export default function AddSleepTime() {
               <em>None</em>
             </MenuItem>
             {state.sleepRecords.map(({ _id, name }) => (
-              <MenuItem value={_id}>{name}</MenuItem>
+              <MenuItem key={_id} value={_id}>
+                {name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

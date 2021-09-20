@@ -5,10 +5,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AddSleepTime from "../AddSleepTime";
-
-import classes from "./App.module.scss";
 import { useAppState } from "../../store";
 import { useEffect } from "react";
+import ViewSleepRecords from "../ViewSleepRecords";
+import classes from "./App.module.scss";
 
 const PATHS = {
   home: "/",
@@ -53,9 +53,7 @@ export default function App() {
       </AppBar>
       <Box className={classes.main} component="main">
         <Switch>
-          <Route exact path={PATHS.home}>
-            VIEW MY SLEEP RECORDS
-          </Route>
+          <Route exact path={PATHS.home} component={ViewSleepRecords} />
           <Route path={PATHS.addSleepTime} component={AddSleepTime}></Route>
         </Switch>
       </Box>
