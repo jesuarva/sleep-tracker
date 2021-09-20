@@ -13,6 +13,7 @@ import { UserRecords } from "../types";
 /* Types */
 interface AppState {
   sleepRecords: UserRecords[];
+  isCreatingUser: boolean;
 }
 
 interface ContextShape {
@@ -24,6 +25,7 @@ interface ContextShape {
 enum ActionTypes {
   getSleepRecords = "getSleepRecords",
   postUser = "postUser",
+  isCreatingUser = "isCreatingUser",
   putNewSleepRecord = "putNewSleepRecord",
 }
 
@@ -37,31 +39,45 @@ interface ActionGetSleepRecords extends Action<ActionTypes.getSleepRecords> {
 
 interface ActionPostUser extends Action<ActionTypes.postUser> {}
 
+interface ActionIsCreatingUser extends Action<ActionTypes.isCreatingUser> {
+  isCreatingUser: boolean;
+}
+
 interface ActionPutSleepRecord extends Action<ActionTypes.putNewSleepRecord> {}
 
-type AppActions = ActionGetSleepRecords | ActionPostUser | ActionPutSleepRecord;
+type AppActions =
+  | ActionGetSleepRecords
+  | ActionPostUser
+  | ActionIsCreatingUser
+  | ActionPutSleepRecord;
 
 /** Dispatchers */
 type Dispatchers = {
   getSleepRecords: () => void;
-  postUser: () => void;
+  postUser: (data: Pick<UserRecords, "name" | "gender">) => void;
   putSleepRecord: () => void;
 };
 
 function getDispatchers(dispatch: Dispatch<AppActions>): Dispatchers {
   return {
     async getSleepRecords() {
-      console.log("\x1b[45mJSAV\x1b[0m getSleepRecords  ");
       try {
         const response: AxiosResponse<UserRecords[]> = await api.get("/");
         const sleepRecords = response.data;
         dispatch({ type: ActionTypes.getSleepRecords, sleepRecords });
       } catch (error) {
-        console.log("\x1b[45mJSAV\x1b[0m error  ", error);
+        console.error(error);
       }
     },
-    postUser() {
-      dispatch({ type: ActionTypes.postUser });
+    async postUser(data) {
+      try {
+        dispatch({ type: ActionTypes.isCreatingUser, isCreatingUser: true });
+        await api.post("/", data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        dispatch({ type: ActionTypes.isCreatingUser, isCreatingUser: false });
+      }
     },
     putSleepRecord() {
       return dispatch({ type: ActionTypes.putNewSleepRecord });
@@ -78,6 +94,12 @@ function reducer(state: AppState, action: AppActions): AppState {
         sleepRecords: action.sleepRecords,
       };
     }
+    case ActionTypes.isCreatingUser: {
+      return {
+        ...state,
+        isCreatingUser: action.isCreatingUser,
+      };
+    }
     default:
       return state;
   }
@@ -86,6 +108,7 @@ function reducer(state: AppState, action: AppActions): AppState {
 /* Context */
 const initialState: AppState = {
   sleepRecords: [],
+  isCreatingUser: false,
 };
 
 const AppStateContext = createContext<ContextShape>({

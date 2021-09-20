@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import AddSleepTime from "../AddSleepTime";
 
 import classes from "./App.module.scss";
+import { useAppState } from "../../store";
+import { useEffect } from "react";
 
 const PATHS = {
   home: "/",
@@ -14,6 +16,12 @@ const PATHS = {
 };
 
 export default function App() {
+  const { dispatch } = useAppState();
+
+  useEffect(() => {
+    void dispatch.getSleepRecords();
+  }, []);
+
   return (
     <Box className={classes.App}>
       <AppBar position="static">

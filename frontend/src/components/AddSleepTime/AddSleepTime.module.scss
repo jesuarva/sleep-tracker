@@ -11,10 +11,12 @@
   align-items: flex-start;
 
   .input {
+    width: 100%;
     margin-bottom: 3rem;
   }
 
   .sleepTime {
+    margin-bottom: 3rem;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -27,6 +29,7 @@
   .submit {
     color: lightcoral;
     border-color: lightcoral;
-    margin: 5rem auto;
+    margin: 0 auto 3rem;
+    cursor: pointer;
   }
 }
