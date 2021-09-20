@@ -1,18 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./index.scss";
 import App from "./components/App";
+import { BrowserRouter as Router } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import Theme from "./theme";
 import { AppStateContextProvider } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Theme>
-      <AppStateContextProvider>
-        <App />
-      </AppStateContextProvider>
-    </Theme>
+    <Router>
+      <Theme>
+        <AppStateContextProvider>
+          <App />
+        </AppStateContextProvider>
+      </Theme>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );
