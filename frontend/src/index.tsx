@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import Theme from "./theme";
+import { AppStateContextProvider } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
     <Theme>
-      <App />
+      <AppStateContextProvider>
+        <App />
+      </AppStateContextProvider>
     </Theme>
   </React.StrictMode>,
   document.getElementById("root")

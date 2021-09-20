@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "../../logo.svg";
 import classes from "./App.module.css";
 
@@ -25,9 +24,3 @@ function App() {
 }
 
 export default App;
-
-// validate: {
-//   validator: (val) =>
-//     /(^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$)/.test(val),
-//   message: `Date must be in format: YYYY-MM-DD`,
-// },
