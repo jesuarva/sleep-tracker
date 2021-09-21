@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAppState } from "../../store";
 import classes from "./ViewSleepRecords.module.scss";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { UserRecords } from "../../types";
 import { EChart } from "./Echart";
 
@@ -35,6 +35,19 @@ export default function ViewSleepRecords() {
   const { state } = useAppState();
 
   const [pickedUser, setPickedUser] = useState<UserRecords>();
+  const [chartOptions, setChartOptions] = useState<{
+    xAxisData: string[];
+    seriesData: number[] | [];
+  }>({ xAxisData: getXAxisData(), seriesData: [] });
+
+  useEffect(() => {
+    if (pickedUser) {
+      setChartOptions(({ xAxisData }) => ({
+        xAxisData,
+        seriesData: getSeriesData(xAxisData, pickedUser),
+      }));
+    }
+  }, [pickedUser]);
 
   return (
     <Paper
@@ -86,14 +99,14 @@ export default function ViewSleepRecords() {
             option={{
               xAxis: {
                 type: "category",
-                data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                data: chartOptions.xAxisData,
               },
               yAxis: {
                 type: "value",
               },
               series: [
                 {
-                  data: [120, 200, 150, 80, 70, 110, 130],
+                  data: chartOptions.seriesData,
                   type: "bar",
                 },
               ],
@@ -103,4 +116,33 @@ export default function ViewSleepRecords() {
       </Paper>
     </Paper>
   );
+}
+
+function getXAxisData(): string[] {
+  const today = new Date();
+  return new Array(7)
+    .fill(null)
+    .map((value, i) => {
+      if (i === 0) return today.toISOString().split("T")[0];
+      else {
+        const newDay = new Date(today);
+        newDay.setDate(today.getDate() - i);
+        return newDay.toISOString().split("T")[0];
+      }
+    })
+    .reverse();
+}
+
+function getSeriesData(xAxisData: string[], pickedUser: UserRecords): number[] {
+  const series = xAxisData.map((day) => {
+    const sleepRecords = pickedUser.sleepRecords.filter(
+      (record) => record && day === record.date.split("T")[0]
+    );
+
+    if (sleepRecords.length) {
+      return sleepRecords.reduce((acc, record) => acc + record.time, 0);
+    } else return 0;
+  });
+
+  return series;
 }

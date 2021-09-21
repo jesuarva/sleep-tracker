@@ -1,6 +1,6 @@
 type UniqueIdentifier = string;
 type ISODate = string;
-type Float = Number;
+type Float = number;
 
 interface User {
   _id: UniqueIdentifier;
