@@ -4,7 +4,10 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const { server } = require("./server");
 
-const { PORT, MONGODB_URI } = process.env;
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://jesuarva-cynomi:--Super--Secret--1@cluster0.bithm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(MONGODB_URI, {
