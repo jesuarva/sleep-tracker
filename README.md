@@ -1,8 +1,6 @@
 # Sleep Tracker App
 
-I was expecting to spend a whole working day to implement all the task.
-
-It end up taking me a bit more as I have not been working for a while with Express and Mongoose, also Material UI has changed a big chunk of its API in its new v.5.0.0, and I had to familiarize with Apache Echarts.
+A personal exercise
 
 ## Run in local development
 
